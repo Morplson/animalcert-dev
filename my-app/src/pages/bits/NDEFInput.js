@@ -6,15 +6,15 @@ const NDEFInput = ({ output }) => {
     const [isCompatible, setIsCompatible] = useState('NDEFReader' in window);
 
     const handleScan = async () => {
-        console.log("User clicked scan button");
+        alert("User clicked scan button");
         if (isCompatible) {
             try {
                 const ndef =  new window.NDEFReader();
                 await ndef.scan();
-                console.log("> Scan started");
+                setTagData("> Scan started");
     
                 ndef.addEventListener("readingerror", () => {
-                    console.log("Argh! Cannot read data from the NFC tag. Try another one?");
+                    setTagData("Argh! Cannot read data from the NFC tag. Try another one?");
                 });
     
                 ndef.addEventListener("reading", ({ message, serialNumber }) => {
