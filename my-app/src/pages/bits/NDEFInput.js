@@ -20,12 +20,14 @@ const NDEFInput = ({ output }) => {
                 ndef.addEventListener("reading", ({ message, serialNumber }) => {
                     var ndefContents = ""
                 
-                    ndefContents += `> Serial Number: ${serialNumber}`
+                    ndefContents += `> Serial Number: ${serialNumber} \n`
 
                     for (const record of message.records) {
-                        ndefContents += `Record type:  ${record.recordType}`;
-                        ndefContents += `MIME type:    ${record.mediaType}`;
-                        ndefContents += `Record id:    ${record.id}`;
+                        ndefContents += `Record type:  ${record.recordType}, `;
+                        ndefContents += `MIME type:    ${record.mediaType}, `;
+                        ndefContents += `Record id:    ${record.id}, `;
+                        ndefContents += `Record data:    ${record.data} \n\n`;
+                        
                         switch (record.recordType) {
                             case "text":
                                 // TODO: Read text record with record data, lang, and encoding.
