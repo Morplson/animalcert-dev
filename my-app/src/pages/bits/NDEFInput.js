@@ -11,7 +11,7 @@ const NDEFInput = ({ output }) => {
             try {
                 const ndef =  new window.NDEFReader();
                 await ndef.scan();
-                setTagData("> Scan started");
+                alert("> Scan started");
     
                 ndef.addEventListener("readingerror", () => {
                     setTagData("Argh! Cannot read data from the NFC tag. Try another one?");
@@ -21,7 +21,7 @@ const NDEFInput = ({ output }) => {
                     setTagData(`> Serial Number: ${serialNumber}`);
                 });
             } catch (error) {
-                console.log("Argh! " + error);
+                alert("Argh! " + error);
             }
         }
         
