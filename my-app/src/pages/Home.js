@@ -23,7 +23,29 @@ const Home = ({ web3, contract, match }) => {
         return () => clearInterval(intervalId);
     }, [contract]);
 
+    async function verifyOwnerId(ID) {
+        var count = false
+        try { count = await contract.methods.balanceOf(ID).call(); }
+        catch { console.log("ID error"); return 0; }
+        if (count !== false && count > 0) {
+            return 1;
+        }
+        else {
+            return 0;
+        }
+    }
 
+    async function openOwner(ID) {
+        if (await verifyOwnerId(ID) === 1) {
+            console.log("GRR")
+            //open link
+            window.location.href = '/owner/' + ID;
+        }
+        else {
+            //popup err msg
+            window.alert("The certificate is not valid")
+        }
+    }
 
     return (
 
@@ -35,8 +57,10 @@ const Home = ({ web3, contract, match }) => {
                 <div class="flex flex-col w-full max-w-md">
                     <label class="text-sm mb-1">Find a certificate</label>
                     <div class="relative">
-                        <input type="text" placeholder="0x..." class="bg-transparent text-white text-2xl w-full border-b border-white focus:border-gray-300 focus:outline-none"></input>
-                        <button class="absolute right-0 top-0 mt-2 text-sm underline hover:no-underline">[Find...]</button>
+                    <div class="relative">
+                        <input type="text" value={Owner} onChange={(e) => setOwner(e.target.value)} placeholder="0x..." class="bg-transparent text-white text-2xl w-full border-b border-white focus:border-gray-300 focus:outline-none"></input>
+                        <button onClick={() => openOwner(Owner)} class="absolute right-0 top-0 mt-2 text-sm underline hover:no-underline">[Find...]</button>
+                    </div>
                     </div>
                     <Link to="/animals" class="text-lg underline mt-4">[Find all...]</Link>
                 </div>

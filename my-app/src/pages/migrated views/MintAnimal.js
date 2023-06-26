@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import * as AnimalMaps from '../../constants'
 import { Web3Context, Web3Data } from '../../Web3Context';
-import RadialMenu from '../bits/RadialMenu';
 
 class MintAnimal extends Component{
   static contextType = Web3Context;
@@ -92,9 +91,7 @@ class MintAnimal extends Component{
             ref={(input) => { this.birthdate = input }}
             required
           />
-          
-          <RadialMenu title={"lol"} name={"animal"} options={ ["o1", "a2", "d3"] } />
-          
+                    
           <h1 className='my-5 form-control'>Diseases</h1>
           <select 
             multiple 
