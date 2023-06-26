@@ -58,7 +58,7 @@ class MintAnimal extends Component{
           />
           <h1 className='my-5 form-control'>Species</h1>  
           <select
-            className='milky-glass my-5 form-control text-white text-sm rounded-lg focus:border-blue-500 block w-full p-2.5 border-2 border-white'
+            className='my-5 form-control bg-transparent text-white text-sm rounded-lg focus:bg-[#F3AE4B] focus:border-blue-500 block w-full p-2.5 border-2 border-white'
             onChange={(event) => { this.species = event.target.value}}
             defaultValue=''
             required>
@@ -72,7 +72,7 @@ class MintAnimal extends Component{
           </select>
           <h1 className='my-5 form-control'>Gender</h1>  
           <select
-            className='milky-glass my-5 form-control bg-transparent text-white text-sm rounded-lg  focus:border-blue-500 block w-full p-2.5 border-2 border-white'
+            className='my-5 form-control bg-transparent text-white text-sm rounded-lg focus:bg-[#F3AE4B] focus:border-blue-500 block w-full p-2.5 border-2 border-white'
             onChange={(event) => { this.gender = event.target.value}}
             defaultValue=''
             required>

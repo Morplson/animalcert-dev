@@ -33,11 +33,13 @@ const AnimalsByOwner = ({ web3, contract }) => {
 
   return (
     <main>
-      <h1  class="page-heading"><EthAddress>{id}</EthAddress>'s Pet{allAnimals != null && (allAnimals.length > 1 && "s")}:</h1>
+      <h1 class="page-heading"><EthAddress>{id}</EthAddress>'s Pet{allAnimals != null && (allAnimals.length > 1 && "s")}:</h1>
 
-      <button class='crypto-button-base crypto-button-vanilla' onClick={() => updateAnimals(id)}>Update</button>
+      <div className='flex flex-row p-2 mt-4'>
+        <button class='crypto-button justify-self-start' onClick={() => updateAnimals(id)}>Update</button>
+      </div>
 
-      <ul class="mt-4 flex flex-col justify-center  items-center">
+      <ul className="grid grid-cols-1 auto-rows-max md:grid-cols-2 xl:grid-cols-3 gap-4">
         {allAnimals != null ? (
           allAnimals.length > 0 ?
             allAnimals.map((animal, index) => (
