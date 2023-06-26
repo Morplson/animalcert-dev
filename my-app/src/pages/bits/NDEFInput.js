@@ -9,7 +9,7 @@ const NDEFInput = ({ output }) => {
         console.log("User clicked scan button");
         if (isCompatible) {
             try {
-                const ndef = new NDEFReader();
+                const ndef =  new window.NDEFReader();
                 await ndef.scan();
                 console.log("> Scan started");
     
