@@ -29,7 +29,7 @@ const NDEFInput = ({ output }) => {
 
     return (
         <React.Fragment>
-            {isCompatible ?
+            {true ?
                 <React.Fragment>
                     <button className='crypto-button text-4xl' onClick={handleScan}>Read DATA</button>
                     <p>{tagData}</p>

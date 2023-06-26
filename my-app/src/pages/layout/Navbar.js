@@ -99,7 +99,7 @@ class Navbar extends Component {
 
         <nav name="burgerPane"
           className={
-            (this.state.active ? "-left-full opacity-0 " : "left-0 opacity-100 ") +
+            (this.state.active ? "-translate-x-full opacity-0 " : "translate-x-0 opacity-100 ") +
             "fixed top-0 left-0 w-screen h-screen z-10 " +
             "grid  gap-1 content-center justify-center text-lg " +
             "milky-glass transition-all"
