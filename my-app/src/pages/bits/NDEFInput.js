@@ -18,8 +18,28 @@ const NDEFInput = ({ output }) => {
                 });
     
                 ndef.addEventListener("reading", ({ message, serialNumber }) => {
-                    alert(message);
-                    setTagData(`> Serial Number: ${serialNumber}`);
+                    var ndefContents = ""
+                
+                    ndefContents += `> Serial Number: ${serialNumber}`
+
+                    for (const record of message.records) {
+                        ndefContents += `Record type:  ${record.recordType}`;
+                        ndefContents += `MIME type:    ${record.mediaType}`;
+                        ndefContents += `Record id:    ${record.id}`;
+                        switch (record.recordType) {
+                            case "text":
+                                // TODO: Read text record with record data, lang, and encoding.
+                                break;
+                            case "url":
+                                // TODO: Read URL record with record data.
+                                break;
+                            default:
+                            // TODO: Handle other records with record data.
+                        }
+                    }
+                    
+                    setTagData(ndefContents)
+
                 });
             } catch (error) {
                 alert("Argh! " + error);
