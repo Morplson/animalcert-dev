@@ -5,6 +5,7 @@ import React, { useState, useEffect } from 'react';
 const Home = ({ web3, contract, match }) => {
 
     const [animalCount, setAnimalCount] = useState(null);
+    const [Owner, setOwner] = useState(null);
 
 
     async function updateAnimalCount() {
