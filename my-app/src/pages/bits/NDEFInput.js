@@ -28,9 +28,10 @@ const NDEFInput = ({ output }) => {
                         ndefContents += `Record id:    ${record.id}, `;
                         ndefContents += `Record data:    ${record.data} \n\n`;
                         
-                        switch (record.recordType) {
-                            case "text":
-                                // TODO: Read text record with record data, lang, and encoding.
+                        switch (record.mediaType) {
+                            case "application/json":
+                                const json = JSON.parse(decoder.decode(record.data));
+                                ndefContents += `Record json:    ${record.json} \n\n`;
                                 break;
                             case "url":
                                 // TODO: Read URL record with record data.
