@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 
 
 const NDEFInput = ({ output }) => {
-    const [tagData, setTagData] = useState("");
+    const [tagData, setTagData] = useState(" click button");
     const [isCompatible, setIsCompatible] = useState('NDEFReader' in window);
 
     const handleScan = async () => {
@@ -31,7 +31,7 @@ const NDEFInput = ({ output }) => {
         <React.Fragment>
             {isCompatible ?
                 <React.Fragment>
-                    <button className='crypto-button' onClick={handleScan}>Read DATA</button>
+                    <button className='crypto-button text-4xl' onClick={handleScan}>Read DATA</button>
                     <p>{tagData}</p>
                 </React.Fragment>
                 :
