@@ -18,6 +18,7 @@ const NDEFInput = ({ output }) => {
                 });
     
                 ndef.addEventListener("reading", ({ message, serialNumber }) => {
+                    const decoder = new TextDecoder();
                     var ndefContents = ""
                 
                     ndefContents += `> Serial Number: ${serialNumber} \n`
@@ -26,12 +27,15 @@ const NDEFInput = ({ output }) => {
                         ndefContents += `Record type:  ${record.recordType}, `;
                         ndefContents += `MIME type:    ${record.mediaType}, `;
                         ndefContents += `Record id:    ${record.id}, `;
-                        ndefContents += `Record data:    ${record.data} \n\n`;
+                        ndefContents += `Record data:    ${record.data}, `;
                         
                         switch (record.mediaType) {
                             case "application/json":
-                                const json = JSON.parse(decoder.decode(record.data));
-                                ndefContents += `Record json:    ${record.json} \n\n`;
+                                // TODO: Read JSON record with record data.
+                                let text = decoder.decode(record.data);
+                                let json = JSON.parse(text);
+                                ndefContents += `Record text:  ${text} \n`;
+                                ndefContents += `Record json:  ${json} \n\n`;
                                 break;
                             case "url":
                                 // TODO: Read URL record with record data.
