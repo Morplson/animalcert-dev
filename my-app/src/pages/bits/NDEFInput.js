@@ -18,6 +18,7 @@ const NDEFInput = ({ output }) => {
                 });
     
                 ndef.addEventListener("reading", ({ message, serialNumber }) => {
+                    alert(message);
                     setTagData(`> Serial Number: ${serialNumber}`);
                 });
             } catch (error) {
