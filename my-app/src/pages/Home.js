@@ -1,7 +1,6 @@
 import { Link } from "react-router-dom";
 import React, { useState, useEffect } from 'react';
 
-import NDEFInput from "./bits/NDEFInput";
 
 const Home = ({ web3, contract, match }) => {
 
@@ -30,7 +29,6 @@ const Home = ({ web3, contract, match }) => {
 
 
         <main>
-            <NDEFInput></NDEFInput>
             <h1 className="page-heading">Animal Certificate</h1>
 
             <div className="mx-8 my-12 flex justify-center">
