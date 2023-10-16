@@ -13,7 +13,7 @@ import AnimalDetails from './pages/migrated views/AnimalDetails';
 import AnimalsByOwner from './pages/migrated views/AnimalsByOwner';
 import AnimalPedigree from './pages/migrated views/AnimalPedigree';
 
-import { Web3Context, Web3Data } from './Web3Context';
+import { Web3Context, Web3Data } from './deprecated/Web3Context';
 import MintAnimal from './pages/migrated views/MintAnimal';
 
 

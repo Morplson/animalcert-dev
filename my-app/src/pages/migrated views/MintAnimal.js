@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import * as AnimalMaps from '../../constants'
-import { Web3Context, Web3Data } from '../../Web3Context';
+import { Web3Context, Web3Data } from '../../deprecated/Web3Context';
 
 class MintAnimal extends Component{
   static contextType = Web3Context;

@@ -5,7 +5,7 @@ import HamburgerButton from "../bits/HamburgerButton";
 
 
 
-import { Web3Context, Web3Data } from '../../Web3Context';
+import { Web3Context, Web3Data } from '../../deprecated/Web3Context';
 
 class Navbar extends Component {
 

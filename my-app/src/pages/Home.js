@@ -1,8 +1,13 @@
 import { Link } from "react-router-dom";
 import React, { useState, useEffect } from 'react';
 
+import { useSelector, useDispatch } from 'react-redux';
+import { increment, decrement } from '../redux/slices/counterSlice';
 
 const Home = ({ web3, contract, match }) => {
+
+    const count = useSelector((state) => state.counter.value);
+    const dispatch = useDispatch();
 
     const [animalCount, setAnimalCount] = useState(null);
     const [Owner, setOwner] = useState(null);
@@ -53,6 +58,12 @@ const Home = ({ web3, contract, match }) => {
 
         <main>
             <h1 className="page-heading">Animal Certificate</h1>
+
+            <div>
+      <p>Count: {count}</p>
+      <button onClick={() => dispatch(increment())}>Increment</button>
+      <button onClick={() => dispatch(decrement())}>Decrement</button>
+    </div>
 
             <div className="mx-8 my-12 flex justify-center">
                 <div class="flex flex-col w-full max-w-md">
