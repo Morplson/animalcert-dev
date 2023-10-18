@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
-import * as AnimalMaps from '../../constants'
+import * as AnimalMaps from '../constants'
 import { Web3Context, Web3Data } from '../../Web3Context';
-import RadialMenu from '../bits/RadialMenu';
+import RadialMenu from '../pages/bits/RadialMenu';
 
 class MintAnimal extends Component{
   static contextType = Web3Context;
