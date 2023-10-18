@@ -8,7 +8,7 @@ const AnimalCard = ({ animal }) => {
     let icon = animal.species == 0 ? dog : cat;
 
     return (
-        <li class="grid grid-cols-5 grid-rows-4 h-full milky-glass rounded-lg border-white border-solid border-2  h-fit drop-shadow-md">
+        <li class="grid grid-cols-5 grid-rows-4 w-full milky-glass rounded-lg border-white border-solid border-2  h-fit drop-shadow-md">
             <div className='row-span-4 row-start-1 col-span-1 col-start-1 h-full grid justify-center content-center border-r border-white border-solid p-2'>
                 <img src={AnimalMaps.ANIMAL_SPECIES_IMAGES[animal.species ?? 99]} alt="Animal Image" class="aspect-square milky-glass self-center rounded-full border-2 border-white" />
             </div>
@@ -25,7 +25,7 @@ const AnimalCard = ({ animal }) => {
                     <span className='font-bold'>Gender</span>: {AnimalMaps.ANIMAL_GENDERS[animal.gender ?? 99]}
                 </span>
                 <span>
-                    <span className='font-bold'>Birthday</span>: {new Date(animal.dateOfBirth * 1000).toLocaleDateString('de-AT')}
+                    <span className='font-bold'>Birthday</span>: {new Date(Number(animal.dateOfBirth) * 1000).toLocaleDateString('de-AT')}
                 </span>
                 <span>
                     <span className='font-bold'>Fur Color</span>: {AnimalMaps.ANIMAL_COLORS[animal.furColor ?? 99]}
