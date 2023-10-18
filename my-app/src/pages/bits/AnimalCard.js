@@ -25,7 +25,7 @@ const AnimalCard = ({ animal }) => {
                     <span className='font-bold'>Gender</span>: {AnimalMaps.ANIMAL_GENDERS[animal.gender ?? 99]}
                 </span>
                 <span>
-                    <span className='font-bold'>Birthday</span>: {new Date(animal.dateOfBirth * 1000).toLocaleDateString('de-AT')}
+                    <span className='font-bold'>Birthday</span>: {new Date(Number(animal.dateOfBirth) * 1000).toLocaleDateString('de-AT')}
                 </span>
                 <span>
                     <span className='font-bold'>Fur Color</span>: {AnimalMaps.ANIMAL_COLORS[animal.furColor ?? 99]}

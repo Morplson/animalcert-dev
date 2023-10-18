@@ -5,13 +5,20 @@ import { useSelector, useDispatch } from 'react-redux';
 import { increment, decrement } from '../redux/slices/counterSlice';
 
 import {
-    useAccount,
+    useContractRead,
 } from 'wagmi'
 
 
-const Home = ({ web3, contract, match }) => {
+const Home = () => {
 
-
+    
+    const contract_supply = useContractRead({
+        abi: useSelector((state) => state.contract.abi),
+        address: useSelector((state) => state.contract.address),
+        functionName: 'totalSupply',
+        watch: true,
+    })
+    
     const count = useSelector((state) => state.counter.value);
     const dispatch = useDispatch();
 
@@ -43,7 +50,7 @@ const Home = ({ web3, contract, match }) => {
                 <h2 className="
                     font-saria text-2xl text-center blue-glow-text
                 ">
-                    Introducing <b>PawsPassport</b>: Your Furry Friend's Ticket to the Digital Age!
+                    Introducing <b>Animal Certificate</b>: Your Furry Friend's Ticket to the Digital Age!
                 </h2>
 
                 <span className="
@@ -53,7 +60,7 @@ const Home = ({ web3, contract, match }) => {
             </span>
 
             <div>
-                <p>Count: {count}; Provider: {null}</p>
+                <p>Count: {count}</p>
                 <button className="crypto_button" onClick={() => dispatch(increment())}>Increment</button>
                 <button className="crypto_button" onClick={() => dispatch(decrement())}>Decrement</button>
             </div>
@@ -76,9 +83,8 @@ const Home = ({ web3, contract, match }) => {
                 <p class="text-lg">
                     🌟 Welcome to the FUTURE of pet care! 🌟
                     
-                    There are currently {0} pets Certified through our service. <br />
-
-                    Get you certificate <Link >TODAY</Link> <br />
+                    There are currently { contract_supply.isSuccess ? Number(contract_supply.data) : contract_supply.status } pets Certified through our service. <br />
+                    { contract_supply.isError ? contract_supply.error.toString() : "" }
                 </p>
             </div>
 

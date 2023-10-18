@@ -1,60 +1,100 @@
 import React, { useState, useEffect } from 'react';
 import { Link, useParams } from "react-router-dom";
-import AnimalCard from '../bits/AnimalCard';
-import EthAddress from '../bits/EthAddress';
+import AnimalCard from './bits/AnimalCard';
+import EthAddress from './bits/EthAddress';
 
-const AnimalsByOwner = ({ web3, contract }) => {
-  const [allAnimals, setAllAnimals] = useState(null);
+import { useSelector, useDispatch } from 'react-redux';
+import {
+  readContract
+} from '@wagmi/core'
+import {
+  useContractRead
+} from 'wagmi'
+
+
+
+const AnimalsByOwner = () => {
+  const [allAnimals, setAllAnimals] = useState([]);
+  const [loading, setLoading] = useState(false);
+
+  const contract_abi = useSelector((state) => state.contract.abi);
+  const contract_address = useSelector((state) => state.contract.address);
 
   let { id } = useParams();
 
-  async function updateAnimals(address) {
-    const count = await contract.methods.balanceOf(address).call();
-    // Load Animals
-    const fetched_animals = [];
-    for (var i = 1; i <= count; i++) {
-      const animalId = await contract.methods.tokenOfOwnerByIndex(address, i - 1).call();
-      const animal = await contract.methods.getAnimal(animalId).call();
-      fetched_animals.push(animal)
-      console.log("fetched animal with id " + animalId);
-      console.log(animal);
+  const balance_of_user = useContractRead({
+    abi: contract_abi,
+    address: contract_address,
+    functionName: 'balanceOf',
+    args: [id],
+    watch: true,
+  })
+
+  const fetch_animals_by_owner = async () => {
+    setLoading(true);
+
+    let all_animals_at_start = [];
+
+    for (let i = 0; i < balance_of_user.data; i++) {
+      try {
+        const single_read_animalId = await readContract({
+          abi: contract_abi,
+          address: contract_address,
+          functionName: 'tokenOfOwnerByIndex',
+          args: [id, i]
+        });
+
+        const single_read_animal = await readContract({
+          abi: contract_abi,
+          address: contract_address,
+          functionName: 'getAnimal',
+          args: [single_read_animalId]
+        });
+
+        //adding in loop to make it look swifter:
+        all_animals_at_start.push(single_read_animal)
+        setAllAnimals(all_animals_at_start);
+      } catch (error) {
+        console.warn("Error while fetchhing some animal: ", error);
+      }
     }
 
-    console.log(fetched_animals);
-    setAllAnimals(fetched_animals);
-    //console.log(allAnimals);
-    console.log("updated Animals");
+    setLoading(false)
   }
 
 
-  useEffect(() => {
-    updateAnimals(id);
-  }, [id]);
+  useEffect(() => {    
+    fetch_animals_by_owner();
+  }, []);
 
   return (
     <main>
       <h1 class="page-heading"><EthAddress>{id}</EthAddress>'s Pet{allAnimals != null && (allAnimals.length > 1 && "s")}:</h1>
 
       <div className='flex flex-row p-2 mt-4'>
-        <button class='crypto-button justify-self-start' onClick={() => updateAnimals(id)}>Update</button>
+        <button class='crypto-button justify-self-start' onClick={fetch_animals_by_owner}>Update</button>
       </div>
 
       <ul className="grid grid-cols-1 auto-rows-max md:grid-cols-2 xl:grid-cols-3 gap-4">
-        {allAnimals != null ? (
-          allAnimals.length > 0 ?
-            allAnimals.map((animal, index) => (
-              <AnimalCard key={index} animal={animal} />
-            ))
-            : // non found
-            <div>
-              No pets found.
-            </div>
-        )
-          : // loaing animation
-          <div>
-            Loading...
-          </div>
+        {allAnimals.length > 0 ? (
+          allAnimals.map((animal, index) => (
+            <AnimalCard key={index} animal={animal} />
+          ))
+
+        ) : (
+
+          // non found
+          <li>
+            No pets found.
+          </li>
+        )}
+
+        {loading &&
+          <li>
+            loading...
+          </li>
         }
+
       </ul>
     </main>
   );

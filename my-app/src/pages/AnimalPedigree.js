@@ -1,35 +1,38 @@
 //import './Pedigree.css';
 
 import React, { useRef, useEffect, useState } from 'react';
-import Component from '../bits/PedigreeCard';
-import Connector from '../bits/PedigreeSpline';
-import Dots from '../bits/PedigreeDots'
+import Component from './bits/PedigreeCard';
+import Connector from './bits/PedigreeSpline';
 
 import { Link, useParams } from 'react-router-dom';
 
+import { useSelector, useDispatch } from 'react-redux';
 
-const AnimalPedigree = ({ web3, contract }) => {
-  /**const data = [
-      { initialPos: { x: 0, y: 0 }, id: 1, animal: 'Dad', connectedTo: [5, 6] },
-      { initialPos: { x: 0, y: 0 }, id: 2, animal: 'Mom', connectedTo: [11, 12] },
-      { initialPos: { x: 0, y: 0 }, id: 3, animal: 'Child 1', connectedTo: [1, 2] },
-      { initialPos: { x: 0, y: 0 }, id: 4, animal: 'Child 2', connectedTo: [1] },
-      { initialPos: { x: 0, y: 0 }, id: 5, animal: 'Grandparent 1', connectedTo: [] },
-      { initialPos: { x: 0, y: 0 }, id: 6, animal: 'Grandparent 2', connectedTo: [] },
-      { initialPos: { x: 0, y: 0 }, id: 7, animal: 'Uncle', connectedTo: [5, 6] },
-      { initialPos: { x: 0, y: 0 }, id: 8, animal: 'Aunt', connectedTo: [13, 14] },
-      { initialPos: { x: 0, y: 0 }, id: 9, animal: 'Cousin 1', connectedTo: [7, 8] },
-      { initialPos: { x: 0, y: 0 }, id: 10, animal: 'Cousin 2', connectedTo: [7] },
-      { initialPos: { x: 0, y: 0 }, id: 11, animal: 'Grandparent 3', connectedTo: [] },
-      { initialPos: { x: 0, y: 0 }, id: 12, animal: 'Grandparent 4', connectedTo: [] },
-      { initialPos: { x: 0, y: 0 }, id: 13, animal: 'Grandparent 5', connectedTo: [] },
-      { initialPos: { x: 0, y: 0 }, id: 14, animal: 'Grandparent 6', connectedTo: [] },
-    ];*/
+import {
+  readContract
+} from '@wagmi/core'
+
+const AnimalPedigree = () => {
+
+  const contract_abi = useSelector((state) => state.contract.abi);
+  const contract_address = useSelector((state) => state.contract.address);
+
+
 
   const fetchSingle = async (id) => {
-    let single = await contract.methods.getAnimal(id).call();
-    let owner = await contract.methods.ownerOf(id).call();
-
+    let single = await readContract({
+      abi: contract_abi,
+      address: contract_address,
+      functionName: 'getAnimal',
+      args: [id]
+    })
+    let owner = await readContract({
+      abi: contract_abi,
+      address: contract_address,
+      functionName: 'ownerOf',
+      args: [id]
+    })
+    
     let animal = Object.assign({}, single);
     animal.owner = owner
 
@@ -169,7 +172,7 @@ const AnimalPedigree = ({ web3, contract }) => {
     console.log(data)
 
     //calculateInitialPositions();
-  }, [contract, id]);
+  }, [id]);
 
 
   return (

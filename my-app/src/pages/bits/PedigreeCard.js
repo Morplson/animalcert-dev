@@ -114,11 +114,11 @@ const PedigreeCard = React.forwardRef(({ animal, index, id, initialPos }, ref) =
         >
         
             <div className='row-span-3 row-start-1 col-span-1 col-start-1 h-full grid justify-center content-center border-r border-white border-solid p-2'>
-                <img src={AnimalMaps.ANIMAL_SPECIES_IMAGES[animal.species ?? 99]} alt="Animal Image" class="aspect-square w-24 milky-glass self-center rounded-full border-2 border-white" />
+                <img src={AnimalMaps.ANIMAL_SPECIES_IMAGES[Number(animal.species ?? 99n)]} alt="Animal Image" class="aspect-square w-24 milky-glass self-center rounded-full border-2 border-white" />
             </div>
         
             <div name="title" className="row-span-1 row-start-1 col-span-2 col-start-2 font-bold px-4 py-1 border-solid border-b border-white">
-                <Link to={"/animals/" + animal.id} className="underline">{animal[6]}</Link>
+                <Link to={"/animals/" + Number(animal.id)} className="underline">{animal.breed.toString()}</Link>
             </div>
             
             <div name="owner" className="row-span-1 row-start-2 col-span-2 col-start-2 text-sm px-4 py-1 border-solid border-b border-white">
@@ -133,7 +133,7 @@ const PedigreeCard = React.forwardRef(({ animal, index, id, initialPos }, ref) =
                     <span className='font-bold'>Gender</span>: {AnimalMaps.ANIMAL_GENDERS[animal.gender ?? 99]}
                 </span>
 				<span>
-                    <span className='font-bold'>Birthday</span>: {new Date(animal.dateOfBirth * 1000).toLocaleDateString('de-AT')}
+                    <span className='font-bold'>Birthday</span>: {new Date(Number(animal.dateOfBirth * 1000n)).toLocaleDateString('de-AT')}
                 </span>
             </div>
         

@@ -5,20 +5,22 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 
 import Layout from "./pages/layout/Layout";
 import Home from "./pages/Home";
-import Nft from "./pages/Nft";
-import ShowAll from './pages/migrated views/ShowAll';
+import Nft from "./pages/About";
+import ShowAll from './pages/ShowAll';
 import NoPage from "./pages/NoPage";
 
-import AnimalDetails from './pages/migrated views/AnimalDetails';
-import AnimalsByOwner from './pages/migrated views/AnimalsByOwner';
-import AnimalPedigree from './pages/migrated views/AnimalPedigree';
+import AnimalDetails from './pages/AnimalDetails';
+import AnimalsByOwner from './pages/AnimalsByOwner';
+import AnimalPedigree from './pages/AnimalPedigree';
 
 import MintAnimal from './pages/migrated views/MintAnimal';
 
 
-import { useSelector, useDispatch } from 'react-redux';
 
 const App = () => {
+
+    
+    
     
     return(
         <BrowserRouter>
