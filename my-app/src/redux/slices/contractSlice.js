@@ -10,10 +10,10 @@ const contractSlice = createSlice({
     },
     reducers: {
         setAbi: (state, action) => {
-            state.data = action.payload;
+            state.abi = action.payload;
         },
         setAddress: (state, action) => {
-            state.data = action.payload;
+            state.address = action.payload;
         },
         
     },

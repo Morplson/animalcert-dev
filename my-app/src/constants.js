@@ -55,3 +55,18 @@ export const ANIMAL_SPECIES_IMAGES = {
   
 export const validNode = (node) => (node && node.nodeType && node.nodeType === 1);
 
+export const siftBigInt = (object) => {
+  const keys = Object.keys(object);
+  keys.forEach(key => {
+    if (typeof object[key] === 'bigint') {
+      // Convert bigint to number
+      object[key] = Number(object[key]);
+    } else if (Array.isArray(object[key])) {
+      // Handle array containing bigint
+      object[key] = object[key].map(value => typeof value === 'bigint' ? Number(value) : value);
+    }
+  });
+  return object;
+};
+
+
