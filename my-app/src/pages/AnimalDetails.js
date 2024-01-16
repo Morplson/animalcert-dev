@@ -251,7 +251,14 @@ const AnimalDetails = () => {
     };
 
     return (
-        <main>
+        <main className="
+            p-4 rounded-lg
+            w-full
+            
+            milky-glass
+            border-2 border-solid border-neutral-200
+            
+        ">
             {(single_read_animal.isLoading || single_ownerOf_animal.isLoading) ? (
                 <>
                     loading...

@@ -1,11 +1,16 @@
 import RadialMenu from "../bits/RadialMenu";
 import * as AnimalMaps from "../../constants";
 import React, {useState} from "react";
-import {useSelector} from "react-redux";
+import { useSelector, useDispatch } from 'react-redux';
 import {prepareWriteContract, writeContract} from "wagmi/actions";
 import {useWaitForTransaction} from "wagmi";
 
+import { setCountdown, setColor, setLink, setText } from '../../redux/slices/tooltipSlice';
+
+
 const MintAnimal = () => {
+    const dispatch = useDispatch();
+
     const [loading, setLoading] = useState(false);
 
     const [diseases, setDiseases] = useState([]);
@@ -45,9 +50,19 @@ const MintAnimal = () => {
         try {
             const transaction = await writeContract(config)
             setHash(transaction.hash)
+            
+            dispatch(setColor('green'));
+            dispatch(setCountdown(5000));
+            dispatch(setText('Animal minted'));
+            dispatch(setLink(getUrlLink()));
+            
             resetValues()
         } catch (error) {
             console.log(error.message)
+            dispatch(setColor('red'));
+            dispatch(setCountdown(5000));
+            dispatch(setText(error.message));
+            dispatch(setLink(''));
         }
     }
 
@@ -57,12 +72,30 @@ const MintAnimal = () => {
     }
 
     return (
-        <main>
+        <main className="
+            mb-4
+            p-4 rounded-lg
+            
+            w-full
+            
+            milky-glass
+            border-2 border-solid border-neutral-200
+            
+        ">
             <h1 class="page-heading">Issue Token</h1>
             {!loading ? (
                 <form onSubmit={(event) => {
                     setLoading(true)
-                    event.preventDefault()
+                    
+                    if (furColor == "" || species == "" || gender == "" || breed == "" || birthdate == "") {
+                        dispatch(setColor('red'));
+                        dispatch(setCountdown(3000));
+                        dispatch(setText('Fill all input fields'));
+                        dispatch(setLink(''));
+                        setLoading(false);
+                        return; 
+                    }
+
 
                     console.log(new FormData(event.target))
 
@@ -78,10 +111,8 @@ const MintAnimal = () => {
                     mint(gender, species, breed, unixTimestamp, diseases, furColor)
                         .finally(() => setLoading(false));
                 }}
-                      className='mx-10'>
-                    { hash.length > 0 &&
-                        <h1 className="text-4xl font-bold text-center mb-4">Hash of latest mint: {getUrlLink()}</h1>
-                    }
+                className='mx-10'>
+
                     <h1 className="text-4xl font-bold text-center mb-4"></h1>
                     <h2 className='my-5 form-control'>Name</h2>
                     <input
@@ -168,7 +199,14 @@ const MintAnimal = () => {
                     </select>
                     <input
                         type='submit'
-                        className='crypto-button-vanilla crypto-button-base'
+                        className=' 
+                            cursor-pointer
+                            px-4 py-2
+                            rounded-lg shadow-sm  
+                            text-sm font-medium text-neutral-900
+                            
+                            bg-white hover:bg-neutral-200 transition-all
+                        '
                         value='MINT'
                     />
                 </form>

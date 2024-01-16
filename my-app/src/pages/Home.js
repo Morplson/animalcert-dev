@@ -3,6 +3,8 @@ import React, { useState, useEffect } from 'react';
 
 import { useSelector, useDispatch } from 'react-redux';
 import { increment, decrement } from '../redux/slices/counterSlice';
+import { setCountdown } from '../redux/slices/tooltipSlice';
+
 
 import {
     useContractRead,
@@ -23,13 +25,17 @@ const Home = () => {
     const dispatch = useDispatch();
 
 
-    
+    const handleButtonClick = () => {
+        // Dispatch the action to set the countdown to 3000 milliseconds (3 seconds)
+        dispatch(setCountdown(3000)); // Assuming your countdown is in seconds
+    };
 
     return (
 
 
         <main className="
-            p-4 rounded-lg 
+            p-4 rounded-lg
+            w-full
             
             milky-glass
             border-2 border-solid border-neutral-200
@@ -47,6 +53,7 @@ const Home = () => {
                 <span className="
                     text-3xl w-fit break-keep
                 ">🚀🌟</span>
+                
                 <h2 className="
                     font-saria text-2xl text-center blue-glow-text
                 ">
@@ -64,6 +71,14 @@ const Home = () => {
                 <button className="crypto_button" onClick={() => dispatch(increment())}>Increment</button>
                 <button className="crypto_button" onClick={() => dispatch(decrement())}>Decrement</button>
             </div>
+            
+            <button className='
+                            px-4 py-2
+                            rounded-lg shadow-sm  
+                            text-sm font-medium text-neutral-900
+                            
+                            bg-white hover:bg-neutral-200 transition-all
+                        ' onClick={handleButtonClick}>Start Countdown</button>
 
             <div className="mx-8 my-12 flex justify-center">
                 <div class="flex flex-col w-full max-w-md">
