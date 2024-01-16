@@ -6,6 +6,8 @@ import contractReducer from './slices/contractSlice';
 import sorterReducer from './slices/sorterSlice';
 import animalReducer from './slices/animalSlice';
 
+import tooltipReducer from './slices/tooltipSlice';
+
 
 const persistConfig = {
     key: 'root',
@@ -23,6 +25,7 @@ const store = configureStore({
         counter: persistedCounterReducer,
         animal: persistedAnimalReducer,
         sorter: persistedSorterReducer,
+        tooltip: tooltipReducer,
     },
 });
 

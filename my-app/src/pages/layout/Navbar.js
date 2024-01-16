@@ -31,7 +31,7 @@ const Navbar = () => {
     <React.Fragment>
       <nav className="
         flex items-center
-        fixed top-0 left-0 w-screen z-50
+        fixed top-0 left-0 w-screen z-20
         milky-glass shadow
         select-none  
       ">
