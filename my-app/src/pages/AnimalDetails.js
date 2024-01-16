@@ -1,6 +1,10 @@
 import {Link, useParams} from 'react-router-dom';
 
 import EthAddress from './bits/EthAddress';
+import DeclareDeathButton from './bits/DeclareDeathButton';
+import ConfirmPregnancyButton from './bits/ConfirmPregnancyButton';
+
+
 import * as AnimalMaps from '../constants';
 
 import {useSelector, useDispatch} from 'react-redux';
@@ -40,22 +44,7 @@ const AnimalDetails = () => {
     const animal = single_read_animal.data;
     const owner = single_ownerOf_animal.data;
 
-    const declare_death = async (id) => {
-        const config = await prepareWriteContract({
-            address: contract_address,
-            abi: contract_abi,
-            functionName: 'death',
-            args: [id, getTimeInUnix(Date.now())]
-        })
 
-        try {
-            const transaction= await writeContract(config)
-            return true;
-        } catch (error) {
-            console.log(error.message)
-            return false;
-        }
-    }
 
     const abort_pregnancy = async (id) => {
         const config = await prepareWriteContract({
@@ -83,7 +72,7 @@ const AnimalDetails = () => {
         })
 
         try {
-            const transaction= await writeContract(config)
+            const transaction = await writeContract(config)
             return true;
         } catch (error) {
             console.log(error.message)
@@ -168,180 +157,90 @@ const AnimalDetails = () => {
             </div>)
     }
 
-    const AddDiseaseButton = () => {
-        const [isModalOpen, setModalOpen] = useState(false);
-        const [selectedDisease, setSelectedDisease] = useState(0)
-        const cancelButtonRef = useRef(null);
-
+const AddDiseaseButton = () => {
+    const [isModalOpen, setModalOpen] = useState(false);
+    const [selectedDisease, setSelectedDisease] = useState(0)
+    const cancelButtonRef = useRef(null);
+    useEffect(() => {
+        if (isModalOpen) {
+            cancelButtonRef.current.focus();
+        }
+    }, [isModalOpen]);
+    const handleAddDisease = () => setModalOpen(true);
+    const handleCancel = () => {
+        setModalOpen(false);
+    };
+    const handleConfirm = () => {
+        // Set the state to close the modal
+        setModalOpen(false);
+        add_Disease(animal.id, selectedDisease)
+            .then(r => {
+                console.log(r)
+            })
+    };
+    const SingleChoiceListOfPossibleDiseases = () => {
+        const [possibleDiseases, setPossibleDiseases] = useState([]);
+        const handleDiseaseChange = (event) => {
+            setSelectedDisease(event.target.value);
+        };
         useEffect(() => {
-            if (isModalOpen) {
-                cancelButtonRef.current.focus();
-            }
-        }, [isModalOpen]);
-
-        const handleAddDisease = () => setModalOpen(true);
-
-        const handleCancel = () => {
-            setModalOpen(false);
-        };
-
-        const handleConfirm = () => {
-            // Set the state to close the modal
-            setModalOpen(false);
-            add_Disease(animal.id, selectedDisease)
-                .then(r => {
-                    console.log(r)
-                })
-        };
-
-        const SingleChoiceListOfPossibleDiseases = () => {
-            const [possibleDiseases, setPossibleDiseases] = useState([]);
-
-            const handleDiseaseChange = (event) => {
-                setSelectedDisease(event.target.value);
-            };
-
-            useEffect(() => {
-                const excludedKeys = animal.diseases.concat(99).map(Number);
-                console.log(excludedKeys)
-                const filteredDiseases = Object.fromEntries(
-                    Object.entries(ANIMAL_DISEASES).filter(([key]) => !excludedKeys.includes(Number(key)))
-                );
-                setPossibleDiseases(filteredDiseases);
-            }, [animal.diseases]); // Add animal.diseases as a dependency
-
-            return (
-                <select
-                    className="border-2 border-gray-300 bg-[#6b7280] h-10 px-5 pr-16 rounded-lg text-sm focus:outline-none"
-                    onChange={handleDiseaseChange}
-                    value={selectedDisease}
-                >
-                    {Object.entries(possibleDiseases).map(([key, value]) => (
-                        <option key={key} value={key}>
-                            {value}
-                        </option>
-                    ))}
-                </select>
+            const excludedKeys = animal.diseases.concat(99).map(Number);
+            console.log(excludedKeys)
+            const filteredDiseases = Object.fromEntries(
+                Object.entries(ANIMAL_DISEASES).filter(([key]) => !excludedKeys.includes(Number(key)))
             );
-        };
-
-        return(
-            <div>
-                <button
-                    className="bg-[#9a3412] hover:bg-gray-800 text-white font-bold py-2 px-4 rounded"
-                    onClick={handleAddDisease}
-                >
-                    Add Disease
-                </button>
-
-                {isModalOpen && (
-                    <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center">
-                        <div className="bg-white p-6 rounded">
-                            <p className="text-gray-800 mb-4">
-                                Add disease
-                            </p>
-                            <SingleChoiceListOfPossibleDiseases />
-                            <button
-                                className="bg-[#4d7c0f] hover:bg-red-600 text-white font-bold py-2 px-4 mt-4 ml-4 rounded"
-                                onClick={handleConfirm}
-                            >
-                                Confirm
-                            </button>
-                            <button
-                                className="bg-gray-300 hover:bg-gray-400 text-gray-700 font-bold py-2 px-4 ml-2 mt-4 rounded"
-                                autoFocus
-                                ref={cancelButtonRef}
-                                onClick={handleCancel}
-                            >
-                                Cancel
-                            </button>
-                        </div>
-                    </div>
-                )}
-            </div>
-        );
-    }
-
-    const DeclareDeathButton = () => {
-        const [isModalOpen, setModalOpen] = useState(false);
-        const [isErrorOpen, setIsErrorOpen] = useState(false);
-        const cancelButtonRef = useRef(null);
-
-        useEffect(() => {
-            if (isModalOpen) {
-                cancelButtonRef.current.focus();
-            }
-        }, [isModalOpen]);
-
-        const handleDeathClick = () => setModalOpen(true);
-
-        const handleCancel = () => {
-            setModalOpen(false);
-            console.log("DEATH PREVENTED!");
-        };
-
-        const handleConfirm = () => {
-            // Set the state to close the modal
-            setModalOpen(false);
-            declare_death(animal.id)
-                .then(r => {
-                    console.log(r)
-                    setIsErrorOpen(r !== true)
-                })
-            console.log("I'M SORRY LITTLE ONE!")
-        };
-
+            setPossibleDiseases(filteredDiseases);
+        }, [animal.diseases]); // Add animal.diseases as a dependency
         return (
-            <div>
-                <button
-                    className="bg-black hover:bg-gray-800 text-white font-bold py-2 px-4 rounded"
-                    onClick={handleDeathClick}
-                >
-                    Declare death
-                </button>
-
-                {isModalOpen && (
-                    <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center">
-                        <div className="bg-white p-6 rounded">
-                            <p className="text-gray-800 mb-4">
-                                Are you sure, that you want to declare this animal dead? This action cannot be reverted
-                                later!
-                            </p>
-                            <button
-                                className="bg-red-500 hover:bg-red-600 text-white font-bold py-2 px-4 mt-4 rounded"
-                                onClick={handleConfirm}
-                            >
-                                Confirm Death
-                            </button>
-                            <button
-                                className="bg-gray-300 hover:bg-gray-400 text-gray-700 font-bold py-2 px-4 ml-2 mt-4 rounded"
-                                autoFocus
-                                ref={cancelButtonRef}
-                                onClick={handleCancel}
-                            >
-                                Cancel
-                            </button>
-                        </div>
-                    </div>
-                )}
-                {isErrorOpen && (
-                    <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center">
-                        <div className="bg-red-400 p-6 rounded">
-                            <p className="text-white mb-4">
-                                An error occurred!
-                            </p>
-                            <button
-                                className="bg-gray-300 hover:bg-gray-400 text-gray-700 font-bold py-2 px-4 ml-2 mt-4 rounded mx-auto"
-                                autoFocus
-                                onClick={() => setIsErrorOpen(false)}>
-                                OK
-                            </button>
-                        </div>
-                    </div>
-                )}
-            </div>
+            <select
+                className="border-2 border-gray-300 bg-[#6b7280] h-10 px-5 pr-16 rounded-lg text-sm focus:outline-none"
+                onChange={handleDiseaseChange}
+                value={selectedDisease}
+            >
+                {Object.entries(possibleDiseases).map(([key, value]) => (
+                    <option key={key} value={key}>
+                        {value}
+                    </option>
+                ))}
+            </select>
         );
     };
+    return(
+        <div>
+            <button
+                className="bg-[#9a3412] hover:bg-gray-800 text-white font-bold py-2 px-4 rounded"
+                onClick={handleAddDisease}
+            >
+                Add Disease
+            </button>
+            {isModalOpen && (
+                <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center">
+                    <div className="bg-white p-6 rounded">
+                        <p className="text-gray-800 mb-4">
+                            Add disease
+                        </p>
+                        <SingleChoiceListOfPossibleDiseases />
+                        <button
+                            className="bg-[#4d7c0f] hover:bg-red-600 text-white font-bold py-2 px-4 mt-4 ml-4 rounded"
+                            onClick={handleConfirm}
+                        >
+                            Confirm
+                        </button>
+                        <button
+                            className="bg-gray-300 hover:bg-gray-400 text-gray-700 font-bold py-2 px-4 ml-2 mt-4 rounded"
+                            autoFocus
+                            ref={cancelButtonRef}
+                            onClick={handleCancel}
+                        >
+                            Cancel
+                        </button>
+                    </div>
+                </div>
+            )}
+        </div>
+    );
+}
+
 
     return (
         <main className="
@@ -398,7 +297,15 @@ const AnimalDetails = () => {
                                     <AddDiseaseButton/>
                                 </div>
                             )}
-                            <div className="fixed bottom-0 right-0 mb-4 flex flex-row">
+                            
+                            <div className="fixed bottom-0 right-0 mb-4 flex flex-col gap-1 items-end">
+                                {animal.pregnant === false && animal.dateOfDeath <= 0 && animal.gender === 0 && account.address && account.address === owner && (
+                                    <div className=" me-4">
+                                        <ConfirmPregnancyButton
+                                            animal={animal}
+                                        />
+                                    </div>
+                                )}
                                 {animal.pregnant === true && account.address && account.address === owner && (
                                     <div className="mr-4">
                                         <AbortPregnancyButton/>

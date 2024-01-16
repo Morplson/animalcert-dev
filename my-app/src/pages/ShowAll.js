@@ -89,8 +89,15 @@ const ShowAll = () => {
                         
                         let clensed_animal = siftBigInt(single_read_animal);
                         
+                        let owner = await readContract({
+                            abi: contract_abi,
+                            address: contract_address,
+                            functionName: 'ownerOf',
+                            args: [i]
+                        })
                         
-                        
+                        clensed_animal["owner"] = siftBigInt(owner);
+                        console.log(clensed_animal);
 
                         //adding in loop to make it look swifter:
                         all_animals_at_start.push(clensed_animal);
