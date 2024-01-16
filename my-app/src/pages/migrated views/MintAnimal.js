@@ -52,7 +52,7 @@ const MintAnimal = () => {
     }
 
     const getUrlLink = () => {
-        const url = `https://goerli.etherscan.io/tx/${hash}`
+        const url = `https://sepolia.etherscan.io/tx/${hash}`
         return <a href={url} target="_blank">{hash}</a>
     }
 

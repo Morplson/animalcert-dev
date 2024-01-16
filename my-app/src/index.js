@@ -9,8 +9,7 @@ import './index.css';
 import App from './App';
 
 import { createWeb3Modal, defaultWagmiConfig } from '@web3modal/wagmi/react'
-import { WagmiConfig, configureChains } from 'wagmi'
-import { goerli } from 'wagmi/chains'
+import {WagmiConfig, configureChains, sepolia} from 'wagmi'
 
 import { infuraProvider } from 'wagmi/providers/infura'
 import { publicProvider } from 'wagmi/providers/public'
@@ -33,7 +32,7 @@ const metadata = {
 // Configure chains & providers with the Alchemy provider.
 // Two popular providers are Alchemy (alchemy.com) and Infura (infura.io)
 const { chains, publicClient, webSocketPublicClient } = configureChains(
-  [ goerli ],
+  [ sepolia ],
   [infuraProvider({ apiKey: '5f544c19cfab4eb09869cab2a266d6f7' }), publicProvider()],
 )
 
