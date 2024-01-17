@@ -129,7 +129,7 @@ const BirthButton = ({animal}) => {
                             <input
                                 type='text'
                                 className='milky-glass my-5 form-control text-gray-800 text-sm rounded-lg focus:border-blue-500 block w-full p-2.5 border-2 border-gray-800 placeholder-neutral-700 placeholder-opacity-70'
-                                placeholder='e.g. Roxy, Cali, Pheebs'
+                                placeholder='e.g. Roxy, Lea, Phoebe'
                                 onChange={(e) => setGirNames(e.target.value)}
                                 value={girNames}
                                 
