@@ -3,6 +3,7 @@ import {Link, useParams} from 'react-router-dom';
 import EthAddress from './bits/EthAddress';
 import DeclareDeathButton from './bits/DeclareDeathButton';
 import ConfirmPregnancyButton from './bits/ConfirmPregnancyButton';
+import BirthButton from './bits/BirthButton';
 
 
 import * as AnimalMaps from '../constants';
@@ -302,6 +303,13 @@ const AddDiseaseButton = () => {
                                 {animal.pregnant === false && animal.dateOfDeath <= 0 && animal.gender === 0 && account.address && account.address === owner && (
                                     <div className=" me-4">
                                         <ConfirmPregnancyButton
+                                            animal={animal}
+                                        />
+                                    </div>
+                                )}
+                                {animal.pregnant === true && account.address && account.address === owner && (
+                                    <div className="mr-4">
+                                        <BirthButton
                                             animal={animal}
                                         />
                                     </div>

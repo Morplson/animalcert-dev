@@ -145,7 +145,7 @@ const MintAnimal = () => {
                         required>
                         <option value='' disabled>Select a gender</option>
                         {Object.entries(AnimalMaps.ANIMAL_GENDERS).map(([key, value]) => {
-                            if (key !== '99') {
+                            if (key != '99') {
                                 return <option key={key} value={key} className='milky-glass '>{value}</option>;
                             }
                             return null;

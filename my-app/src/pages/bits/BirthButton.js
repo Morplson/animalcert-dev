@@ -7,12 +7,13 @@ import { setCountdown, setColor, setLink, setText } from '../../redux/slices/too
 import {
     useAccount
 } from 'wagmi'
+
+import * as AnimalMaps from "../../constants";
 import ReusableDropdown from './ReusableDropdown';
 
-const ConfirmPregnancyButton = ({animal}) => {
+const BirthButton = ({animal}) => {
     const dispatch = useDispatch();
 
-    const [maleId, setMaleId] = useState(null);
 
     const [isModalOpen, setModalOpen] = useState(false);
     const [isErrorOpen, setIsErrorOpen] = useState(false);
@@ -25,8 +26,10 @@ const ConfirmPregnancyButton = ({animal}) => {
     const { address, isConnected } = useAccount()
     const allAnimals = useSelector((state) => state.animal.animals);
     
-    const maleOwnerAnimals = allAnimals.filter( anim => anim.owner === address && anim.gender === 1 && anim.species === animal.species)
     
+    const [girNames, setGirNames] = useState("");
+    const [boyNames, setBoyNames] = useState("");
+    const [furColor, setFurColor] = useState(null);
     
     useEffect(() => {
         if (isModalOpen) {
@@ -41,16 +44,23 @@ const ConfirmPregnancyButton = ({animal}) => {
         console.log("DEATH PREVENTED!");
     };
     
-    const confirm_pregnancy = async (id) => {
-        if(maleId === null){
+    const confirm_birth = async (id) => {
+        if(furColor === null || girNames === null || boyNames === null){
+            return false;
+        }
+        
+        let girNameList = girNames.split(',').map(name => name.trim());
+        let boyNameList = boyNames.split(',').map(name => name.trim());
+        
+        if(girNameList.length <= 0 && boyNameList.length <= 0){
             return false;
         }
         
         const config = await prepareWriteContract({
             address: contract_address,
             abi: contract_abi,
-            functionName: 'confirmPregnancy',
-            args: [id, maleId]
+            functionName: 'birth',
+            args: [id, girNameList, boyNameList, furColor]
         })
 
         try {
@@ -58,8 +68,8 @@ const ConfirmPregnancyButton = ({animal}) => {
             
             dispatch(setColor('green'));
             dispatch(setCountdown(5000));
-            dispatch(setText('Animal minted'));
-            dispatch(setLink(""));
+            dispatch(setText(animal.breed+' gave birth'));
+            dispatch(setLink("/owner/"+animal.owner+"/"));
             
             return true;
         } catch (error) {
@@ -71,8 +81,7 @@ const ConfirmPregnancyButton = ({animal}) => {
     const handleConfirm = () => {
         // Set the state to close the modal
         setModalOpen(false);
-        console.log(animal)
-        confirm_pregnancy(animal.id)
+        confirm_birth(animal.id)
             .then(r => {
                 console.log(r)
                 setIsErrorOpen(r !== true)
@@ -80,17 +89,22 @@ const ConfirmPregnancyButton = ({animal}) => {
         console.log("confirmed pregnancie")
     };
     
-    const handleMaleChange = (value) => {
-        setMaleId(value)
+    const handleFurChange = (value) => {
+        setFurColor(value)
     };
     
-    let owned_animals_selectorate = [{"label": "Seems you don't own any applicable animals", "value": null}]
-    if(maleOwnerAnimals.length > 0) {
-        owned_animals_selectorate = maleOwnerAnimals.map((anim) => ({
-            label: anim.breed,
-            value: anim.id
-        }));
-    }    
+    console.log(Object.entries(AnimalMaps.ANIMAL_COLORS));
+    
+    const fur_color_selectorate = Object.entries(AnimalMaps.ANIMAL_COLORS).filter(([key, value]) =>{
+        return key !== '99';
+    }).map(([key, value]) => {
+        return {
+            "label": value,
+            "value": key
+        }
+    });
+    
+    console.log(fur_color_selectorate)
     
     
     return (
@@ -99,27 +113,47 @@ const ConfirmPregnancyButton = ({animal}) => {
                 className="bg-pink-600 hover:bg-pink-500 text-white font-bold py-2 px-4 rounded"
                 onClick={handleDeathClick}
             >
-                Confirm Pregnancy
+                Report Birth
             </button>
             {isModalOpen && (
                 <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center">
                     <div className="bg-white p-6 rounded">
-                        <p className="text-gray-800 mb-4">
-                            Select the other parent:
-                            {maleOwnerAnimals.length > 0 && (
-                                <span className="text-black">
-                                    <ReusableDropdown
-                                        options={owned_animals_selectorate}
-                                        onChange={handleMaleChange}
-                                        store_adress={null}
-                                        default_label="your animals"
-                                    /> 
-                                </span>
-                            )}
-                        </p>
+                        
                         
                         <p className="text-gray-800 mb-4">
-                            Are you sure, this animal is pregnant? This action cannot be reverted, but you will be able to abort your animals pregnancy if an error occured.
+                            Congratulations! Your pet gave birth.
+                            You are now able to name your pet's litter: 
+                        </p>
+                        
+                        <div className="grid grid-cols-2 gap-2">
+                            <input
+                                type='text'
+                                className='milky-glass my-5 form-control text-gray-800 text-sm rounded-lg focus:border-blue-500 block w-full p-2.5 border-2 border-gray-800 placeholder-neutral-700 placeholder-opacity-70'
+                                placeholder='e.g. Roxy, Cali, Pheebs'
+                                onChange={(e) => setGirNames(e.target.value)}
+                                value={girNames}
+                                
+                            />
+                            <input
+                                type='text'
+                                className='milky-glass my-5 form-control text-gray-800 text-sm rounded-lg focus:border-blue-500 block w-full p-2.5 border-2 border-gray-800 placeholder-neutral-700 placeholder-opacity-70'
+                                placeholder='e.g. Felix, Monkey, Michael'
+                                onChange={(e) => setBoyNames(e.target.value)}
+                                value={boyNames}
+                                
+                            />
+                        </div>
+                        
+                        <p className="text-gray-800 mb-4">
+                            Select the color of the litter:
+                            <span className="text-black">
+                                <ReusableDropdown
+                                    options={fur_color_selectorate}
+                                    onChange={handleFurChange}
+                                    store_adress={null}
+                                    default_label="select color"
+                                /> 
+                            </span>
                         </p>
                         
                         
@@ -128,7 +162,7 @@ const ConfirmPregnancyButton = ({animal}) => {
                             className="bg-pink-600 hover:bg-pink-500 text-white font-bold py-2 px-4 mt-4 rounded"
                             onClick={handleConfirm}
                         >
-                            Confirm Pregnancy
+                            Accept
                         </button>
                         <button
                             className="bg-gray-300 hover:bg-gray-400 text-gray-700 font-bold py-2 px-4 ml-2 mt-4 rounded"
@@ -160,4 +194,4 @@ const ConfirmPregnancyButton = ({animal}) => {
     );
 };
 
-export default ConfirmPregnancyButton;
+export default BirthButton;
