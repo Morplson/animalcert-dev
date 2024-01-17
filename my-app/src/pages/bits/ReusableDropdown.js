@@ -2,17 +2,20 @@ import React, { useState, useEffect } from 'react';
 import { useSelector } from 'react-redux';
 
 const ReusableDropdown = ({ options, onChange, store_adress, default_label }) => {
-    const value = useSelector(store_adress);
+    const value = store_adress!==null?useSelector(store_adress):null;
     const [isOpen, setIsOpen] = useState(false);
     const [localLabel, setLocalLabel] = useState(default_label? default_label : "none");
 
     const handleOptionClick = (optionValue) => {
         onChange(optionValue);
+        setLocalLabel(options.find((option) => option.value === optionValue)?.label);
         setIsOpen(false);
     };
     
     useEffect(() => {
-        setLocalLabel(options.find((option) => option.value === value)?.label);
+        if(store_adress!==null){
+            setLocalLabel(options.find((option) => option.value === value)?.label);
+        } 
     }, [value]);
 
     return (
