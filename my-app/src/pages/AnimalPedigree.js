@@ -62,8 +62,8 @@ const AnimalPedigree = () => {
     let lookdepth = 2;
     let gNodes = []
 
-    if(master.father !== master.id) gNodes.push(master.father);
-    if(master.mother !== master.id) gNodes.push(master.mother);
+    if(master.father !== master.id && master.father !== 0n) gNodes.push(master.father);
+    if(master.mother !== master.id && master.mother !== 0n) gNodes.push(master.mother);
 
     for (let index = 0; index < lookdepth; index++) {
       for (let jndex = 0; jndex < gNodes.length; jndex++) {
@@ -76,8 +76,8 @@ const AnimalPedigree = () => {
   
           dataList.push(toDataItem(geriatric))
   
-          if(geriatric.father !== geriatric.id) gNodes.push(geriatric.father);
-          if(geriatric.mother !== geriatric.id) gNodes.push(geriatric.mother);
+          if(geriatric.father !== geriatric.id && geriatric.father !== 0n) gNodes.push(geriatric.father);
+          if(geriatric.mother !== geriatric.id && geriatric.mother !== 0n) gNodes.push(geriatric.mother);
         }
       }
     }
@@ -124,14 +124,10 @@ const AnimalPedigree = () => {
     const globalTopOffset = 25;
 
     // Step 1: Cluster array into layers by connected nodes
-    const grandparents = data.filter(node => node.connectedTo.length === 0);
+    const grandparents = data;
     layers.push(grandparents);
 
-    const parentsAndAunts = data.filter(node => node.connectedTo.some(id => grandparents.find(g => g.id === id)));
-    layers.push(parentsAndAunts);
-
-    const childrenAndCousins = data.filter(node => node.connectedTo.some(id => parentsAndAunts.find(p => p.id === id)));
-    layers.push(childrenAndCousins);
+    
 
     // Step 2: Calculate x and y coordinates for each node
 
@@ -147,11 +143,11 @@ const AnimalPedigree = () => {
 
     // Iterate over each layer and distribute the nodes on the x and y axes
     layers.forEach((layer, layerIndex) => {
-      let yPos = globalTopOffset + (centerY - (offsetY * layers.length) / 2) + ((layerIndex) * offsetY); // Calculate y position for the layer
+      let yPos = globalTopOffset + (centerY - (offsetY * (layers.length+1)) / 2) + ((layerIndex) * offsetY); // Calculate y position for the layer
 
       // Distribute nodes within the layer
       layer.forEach((node, nodeIndex) => {
-        let xPos = (centerX - (offsetX * layer.length) / 2) + ((nodeIndex) * offsetX); // Calculate initial x position for the layer
+        let xPos = (centerX - (offsetX * (layer.length+1)) /2) + ((nodeIndex) * offsetX); // Calculate initial x position for the layer
 
         node.initialPos.x = xPos;
         node.initialPos.y = yPos;

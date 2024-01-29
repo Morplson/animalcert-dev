@@ -16,7 +16,6 @@ import {
 } from 'wagmi'
 import {useEffect, useRef, useState, createRef} from "react";
 import {prepareWriteContract, writeContract} from "wagmi/actions";
-import {getTimeInUnix} from "../helper";
 import {ANIMAL_DISEASES} from "../constants";
 
 const AnimalDetails = () => {
@@ -321,7 +320,9 @@ const AddDiseaseButton = () => {
                                 )}
                                 {animal.dateOfDeath <= 0 && account.address && account.address === owner && (
                                     <div className="mr-4">
-                                        <DeclareDeathButton/>
+                                        <DeclareDeathButton
+                                            animal={animal}
+                                        />
                                     </div>
                                 )}
                             </div>

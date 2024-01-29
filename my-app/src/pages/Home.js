@@ -1,10 +1,10 @@
 import { Link } from "react-router-dom";
-import React, { useState, useEffect } from 'react';
+import React, { useRef } from 'react';
 
 import { useSelector, useDispatch } from 'react-redux';
-import { increment, decrement } from '../redux/slices/counterSlice';
-import { setCountdown } from '../redux/slices/tooltipSlice';
-
+import {
+    setSearchString
+} from '../redux/slices/sorterSlice';
 
 import {
     useContractRead,
@@ -12,6 +12,7 @@ import {
 
 
 const Home = () => {
+    const searchRef = useRef(null)
 
     
     const contract_supply = useContractRead({
@@ -25,9 +26,15 @@ const Home = () => {
     const dispatch = useDispatch();
 
 
-    const handleButtonClick = () => {
-        // Dispatch the action to set the countdown to 3000 milliseconds (3 seconds)
-        dispatch(setCountdown(3000)); // Assuming your countdown is in seconds
+    const handleSearchClick = () => {
+        if (searchRef.current!==null) {
+            const searchString = searchRef.current.value;;
+            
+            dispatch(setSearchString(searchString));
+            
+            window.location.href = "/animals/";
+        }
+        
     };
 
     return (
@@ -66,27 +73,13 @@ const Home = () => {
             
             </span>
 
-            <div>
-                <p>Count: {count}</p>
-                <button className="crypto_button" onClick={() => dispatch(increment())}>Increment</button>
-                <button className="crypto_button" onClick={() => dispatch(decrement())}>Decrement</button>
-            </div>
-            
-            <button className='
-                            px-4 py-2
-                            rounded-lg shadow-sm  
-                            text-sm font-medium text-neutral-900
-                            
-                            bg-white hover:bg-neutral-200 transition-all
-                        ' onClick={handleButtonClick}>Start Countdown</button>
-
             <div className="mx-8 my-12 flex justify-center">
                 <div class="flex flex-col w-full max-w-md">
                     <label class="text-sm mb-1">Find a certificate</label>
                     <div class="relative">
                         <div class="relative">
-                            <input type="text"  placeholder="0x..." class="bg-transparent text-white text-2xl w-full border-b border-white focus:border-gray-300 focus:outline-none"></input>
-                            <button onClick={() => console.log("depricated.")} class="absolute right-0 top-0 mt-2 text-sm underline hover:no-underline">[Find...]</button>
+                            <input ref={searchRef} type="text"  placeholder="0x..." class="bg-transparent text-white text-2xl w-full border-b border-white focus:border-gray-300 focus:outline-none"></input>
+                            <button onClick={handleSearchClick} class="absolute right-0 top-0 mt-2 text-sm underline hover:no-underline">[Find...]</button>
                         </div>
                     </div>
                     <Link to="/animals" class="text-lg underline mt-4">[Find all...]</Link>
