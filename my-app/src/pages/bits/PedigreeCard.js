@@ -54,8 +54,9 @@ const PedigreeCard = React.forwardRef(({ animal, index, id, initialPos }, ref) =
     
     const handleResize = (event) => {
         event.preventDefault();
-        event.target.classList.remove('dragging');
-        
+        if(event.target.classList){
+            event.target.classList.remove('dragging');
+        }
         let exactPos = null
         
         if ( validNode(cardRef.current) ) {
@@ -105,7 +106,7 @@ const PedigreeCard = React.forwardRef(({ animal, index, id, initialPos }, ref) =
                 absolut 
                 milky-glass border-2 border-solid border-white rounded-lg shadow-md 
                 
-                transition-all duration-11 hover:cursor-pointer active:cursor-grabbing
+                transition-all duration-11 hover:cursor-pointer active:cursor-grabbing w-72
             "
             draggable={true}
             onDragStart={handleDragStart}

@@ -125,7 +125,7 @@ const MintAnimal = () => {
                     />
                     <h1 className='my-5 form-control'>Species</h1>
                     <select
-                        className='milky-glass my-5 form-control text-white text-sm rounded-lg focus:border-blue-500 block w-full p-2.5 border-2 border-white'
+                        className='milky-glass my-5 form-control bg-transparent text-white text-sm rounded-lg focus:bg-white focus:text-neutral-800 focus:border-sky-300 block w-full p-2.5 border-2 border-white'
                         onChange={(event) => setSpecies(event.target.value)}
                         value={species}
                         required>
@@ -139,7 +139,7 @@ const MintAnimal = () => {
                     </select>
                     <h1 className='my-5 form-control'>Gender</h1>
                     <select
-                        className='milky-glass my-5 form-control bg-transparent text-white text-sm rounded-lg  focus:border-blue-500 block w-full p-2.5 border-2 border-white'
+                        className='milky-glass my-5 form-control bg-transparent text-white text-sm rounded-lg focus:bg-white focus:text-neutral-800 focus:border-sky-300 block w-full p-2.5 border-2 border-white'
                         onChange={(event) => setGender(event.target.value)}
                         value={gender}
                         required>
@@ -154,21 +154,19 @@ const MintAnimal = () => {
                     <h1 className='my-5 form-control'>Birthdate</h1>
                     <input
                         type='date'
-                        className='my-5 form-control bg-transparent text-white text-sm rounded-lg focus:border-blue-500 block w-full p-2.5 border-2 border-white placeholder-white placeholder-opacity-70'
+                        className='milky-glass my-5 form-control bg-transparent text-white text-sm rounded-lg focus:border-sky-300 block w-full p-2.5 border-2 border-white placeholder-white placeholder-opacity-70'
                         value={birthdate}
                         onChange={(e) => setBirthdate(e.target.value)}
                         required
                     />
 
-                    {
-                        //<RadialMenu title={"lol"} name={"animal"} options={ ["o1", "a2", "d3"] } />
-                    }
+                    
 
                     <h1 className='my-5 form-control'>Diseases</h1>
                     <select
                         multiple
                         onChange={handleSelectChange}
-                        className='my-5 form-control bg-transparent text-white text-sm rounded-lg focus:border-blue-500 block w-full p-2.5 border-2 border-white'>
+                        className='milky-glass my-5 form-control bg-transparent text-white text-sm rounded-lg focus:bg-white focus:text-neutral-800 focus:border-sky-300 block w-full p-2.5 border-2 border-white'>
                         <option disabled value="">
                             Select diseases
                         </option>
@@ -185,7 +183,7 @@ const MintAnimal = () => {
                     </select>
                     <h1 className='my-5 form-control'>Color</h1>
                     <select
-                        className='my-5 form-control bg-transparent text-white text-sm rounded-lg focus:bg-[#F3AE4B] focus:border-blue-500 block w-full p-2.5 border-2 border-white'
+                        className='milky-glass my-5 form-control bg-transparent text-white text-sm rounded-lg focus:bg-white focus:text-neutral-800 focus:border-sky-300 block w-full p-2.5 border-2 border-white'
                         onChange={(event) => setFurColor(event.target.value)}
                         value={furColor}
                         required>
